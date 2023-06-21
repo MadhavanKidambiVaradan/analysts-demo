@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #f1f1f1;
+      padding: 10px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      display: inline;
+      margin-right: 10px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+    }
+
+    #content {
+      margin-top: 60px; /* Adjust this value to leave space for the fixed header */
+      padding: 20px;
+    }
+  </style>
+  <script>
+    function loadContent(url) {
+      var xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          document.getElementById('content').innerHTML = xhr.responseText;
+        }
+      };
+
+      xhr.open('GET', url, true);
+      xhr.send();
+    }
+
+    window.onload = function() {
+    loadContent('https://vllsag.github.io/analysts-demo/summary-functional.html');
+      var links = document.querySelectorAll('nav a');
+
+      for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', function(e) {
+          e.preventDefault(); // Prevent the default behavior of the link
+
+          var url = this.getAttribute('href');
+          loadContent(url);
+        });
+      }
+    };
+  </script>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="https://vllsag.github.io/analysts-demo/summary-functional.html" >Functional Test Results </a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <div id="content">
+ 
+  </div>
+</body>
+</html>
