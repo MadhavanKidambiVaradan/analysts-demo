@@ -15,7 +15,7 @@ jobs:
   dev_suite:
     environment:
         name: Dev suite deployment
-        url: https://vllsag.github.io/analysts-demo/
+        url: https://madhavankidambivaradan.github.io/analysts-demo/
     runs-on: self-hosted 
     
     steps:
@@ -53,7 +53,7 @@ jobs:
   qa_suite:
     environment:
         name: QA suite deployment
-        url: https://vllsag.github.io/analysts-demo/index.html
+        url: https://madhavankidambivaradan.github.io/analysts-demo/index.html
     runs-on: self-hosted 
     needs: dev_suite
     steps:
