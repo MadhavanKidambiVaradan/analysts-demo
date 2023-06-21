@@ -22,7 +22,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-
+      - name: Stylecheck - Validate OpenAPI definition
+        uses: char0n/swagger-editor-validate@v1
+        with:
+          definition-file: assets/petstore/API/API.070111f2-befc-11ec-9621-df3e3620bc44
+          
       - name: Run fuctional tests
         run: |
             cd tests
