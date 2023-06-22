@@ -14,7 +14,7 @@ concurrency:
 jobs:
   dev_suite:
     environment:
-        name: Dev suite deployment
+        name: QA environment
         url: https://madhavankidambivaradan.github.io/analysts-demo/
     runs-on: self-hosted 
     
@@ -60,7 +60,7 @@ jobs:
         
   qa_suite:
     environment:
-        name: QA suite deployment
+        name: Prod Suite deployment
         url: https://madhavankidambivaradan.github.io/analysts-demo/index.html
     runs-on: self-hosted 
     needs: dev_suite
