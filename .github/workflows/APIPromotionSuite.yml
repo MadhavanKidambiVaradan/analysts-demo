@@ -21,11 +21,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+        
+      - name: Get swagger file for style Check
+        run: |
+          curl -o petstore.yaml https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44?format=swagger -u ${{ secrets.username }}:${{ secrets.password }}
+          
       - name: Stylecheck - Validate OpenAPI definition
         uses: char0n/swagger-editor-validate@v1
         with:
-          definition-file: assets/petstore/API/API.070111f2-befc-11ec-9621-df3e3620bc44/API.070111f2-befc-11ec-9621-df3e3620bc44
+          definition-file: petstore.yaml
           
       - name: Run fuctional tests
         run: |
