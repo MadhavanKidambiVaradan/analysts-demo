@@ -2,7 +2,9 @@ name: API Promotion suite
 
 on: 
   workflow_dispatch:
-  
+  push:
+    branches: [ main ]
+    
 permissions:
    contents: read
    pages: write
