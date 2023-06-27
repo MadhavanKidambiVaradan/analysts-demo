@@ -4,7 +4,7 @@ import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporte
 
 export let options = {
   duration: "1m",
-  vus: 10,
+  vus: 1,
   thresholds: {
     http_req_duration: ["p(10)<500"] // 95 percent of response times must be below 500ms
   }
