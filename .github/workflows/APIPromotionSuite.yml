@@ -30,12 +30,12 @@ jobs:
         
       - name: Prepare API for update
         run : | 
-            curl -i -X PUT https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/deactivate \
+            curl -X PUT https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/deactivate \
             --user ${{ secrets.username }}:${{ secrets.password }}
             
       - name: Import the swagger 
         run: |
-            curl -i -X PUT https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44?overwriteTags=null \
+            curl -X PUT https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44?overwriteTags=null \
             -F type=swagger -F file=@swagger.json \
             -F apiName=Governed Petstore --user ${{ secrets.username }}:${{ secrets.password }}
             
