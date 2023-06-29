@@ -8,7 +8,7 @@ on:
 jobs:
   dev_suite:
     environment:
-        name: QA environment
+        name: Dev environment
     runs-on: self-hosted 
     steps:
       - name: Checkout code
@@ -49,12 +49,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: Dev-functional-test-results-{{ github.sha }}
+          name: Dev-functional-test-results-$GITHUB_SHA
           path: 'results/*'
 
       - name: Promote to API portal
         run: |    
-            curl -X PUT https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f -d {\"communities\":[\"3bdf8005-5685-3ef5-b132-de4681963fb6\"],\"endpoints\":[\"https://analystsdemo.apigw-aw-eu.webmethods.io/gateway/Goverened%20Petstore/1.0.0\"]} -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}
+            curl -X PUT -d '{"communities":["3bdf8005-5685-3ef5-b132-de4681963fb6"],"endpoints":["https://analystsdemo.apigw-aw-eu.webmethods.io/gateway/Goverened%20Petstore/1.0.0"]}' -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}  https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f
  
       - name: Promote to QA
         run: |
@@ -62,7 +62,7 @@ jobs:
 
   qa_suite:
     environment:
-        name: Prod environment
+        name: QA environment
     runs-on: self-hosted 
     needs: dev_suite
     steps:
@@ -87,11 +87,23 @@ jobs:
          cp tests/summary.html  results 
          cp tests/summary-functional.html results
 
-      - name: Promote to API portal
+      - name: Upload QA test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: QA-test-results-$GITHUB_SHA
+          path: 'results/*'
+
+      - name: Promote to QA API portal
         run: |    
-            curl -X PUT https://demofreeforever.apigw-aw-eu.webmethods.io//rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f -d {\"communities\":[\"3bdf8005-5685-3ef5-b132-de4681963fb6\"],\"endpoints\":[\"http://freeforever.apigw-aw-eu.webmethods.io/gateway/Governed%20Petstore/"]} -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}
+            curl -X PUT https://demofreeforever.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f -d '{"communities":["3bdf8005-5685-3ef5-b132-de4681963fb6"],"endpoints":["http://freeforever.apigw-aw-eu.webmethods.io/gateway/Governed%20Petstore/"]}' -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}
 
       - name: Promote to Prod Gateway
         run: |
          curl -X POST -d '{"description": "Promotion Set to promote to Prod environment","name":"PromoteToProd","destinationStages": ["6993504b-afd6-450d-a4ec-076a151e34e4"],"promotedAssets": {"api": ["070111f2-befc-11ec-9621-df3e3620bc44"]}}' -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }} https://demofreeforever.apigw-aw-eu.webmethods.io/rest/apigateway/promotion  
+      
+      - name: Promote to Prod API portal
+        run: |    
+            curl -X PUT https://freeforever.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f -d '{"communities":["3bdf8005-5685-3ef5-b132-de4681963fb6"],"endpoints":["https://freeforever.apigw-aw-eu.webmethods.io/gateway/Governed%20Petstore/"]}' -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}
+
          
