@@ -19,7 +19,6 @@ jobs:
         name: QA environment
         url: https://madhavankidambivaradan.github.io/analysts-demo/
     runs-on: self-hosted 
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -62,9 +61,9 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
 
-     - name: Promote to API portal
-       run: |    
-        curl -X PUT https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f -d {\"communities\":[\"3bdf8005-5685-3ef5-b132-de4681963fb6\"],\"endpoints\":[\"https://analystsdemo.apigw-aw-eu.webmethods.io/gateway/Goverened%20Petstore/1.0.0\"]} -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}
+      - name: Promote to API portal
+        run: |    
+            curl -X PUT https://analystsdemo.apigw-aw-eu.webmethods.io/rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f -d {\"communities\":[\"3bdf8005-5685-3ef5-b132-de4681963fb6\"],\"endpoints\":[\"https://analystsdemo.apigw-aw-eu.webmethods.io/gateway/Goverened%20Petstore/1.0.0\"]} -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}
  
       - name: Promote to QA
         run: |
