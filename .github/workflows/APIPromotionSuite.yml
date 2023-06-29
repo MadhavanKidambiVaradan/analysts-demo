@@ -42,7 +42,6 @@ jobs:
         if: always()
         run: |
          mkdir results 
-         cp index.html results 
          cp tests/summary-functional.html results
          
       - name: Upload Dev functional test results
@@ -83,7 +82,6 @@ jobs:
         if: always()
         run: |
          mkdir results 
-         cp index-performance.html results/index.html
          cp tests/summary.html  results 
          cp tests/summary-functional.html results
 
