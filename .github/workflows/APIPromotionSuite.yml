@@ -49,7 +49,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: Dev-functional-test-results-$GITHUB_SHA
+          name: Dev-functional-test-results
           path: 'results/*'
 
       - name: Promote to API portal
@@ -91,7 +91,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: QA-test-results-$GITHUB_SHA
+          name: QA-test-results
           path: 'results/*'
 
       - name: Promote to QA API portal
