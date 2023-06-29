@@ -5,19 +5,10 @@ on:
   push:
     branches: [ main ]
     
-permissions:
-   contents: read
-   pages: write
-   id-token: write
-concurrency:
-   group: 'pages'
-   cancel-in-progress: true
-
 jobs:
   dev_suite:
     environment:
         name: QA environment
-        url: https://madhavankidambivaradan.github.io/analysts-demo/
     runs-on: self-hosted 
     steps:
       - name: Checkout code
@@ -54,16 +45,12 @@ jobs:
          cp index.html results 
          cp tests/summary-functional.html results
          
-      - name: Upload artifact
+      - name: Upload Dev functional test results
         if: always()
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
-             path: './results'
-             
-      - name: Deploy to GitHub Pages
-        if: always()
-        id: deployment
-        uses: actions/deploy-pages@v1
+          name: Dev-functional-test-results-{{ github.sha }}
+          path: 'results/*'
 
       - name: Promote to API portal
         run: |    
@@ -76,7 +63,6 @@ jobs:
   qa_suite:
     environment:
         name: Prod environment
-        url: https://madhavankidambivaradan.github.io/analysts-demo/index.html
     runs-on: self-hosted 
     needs: dev_suite
     steps:
@@ -100,19 +86,12 @@ jobs:
          cp index-performance.html results/index.html
          cp tests/summary.html  results 
          cp tests/summary-functional.html results
-         
-      - name: Upload artifact
-        if: always()
-        uses: actions/upload-pages-artifact@v1
-        with:
-             path: './results'
-             
-      - name: Deploy to GitHub Pages
-        if: always()
-        id: deployment
-        uses: actions/deploy-pages@v1
- 
-      - name: Promote to Prod
+
+      - name: Promote to API portal
+        run: |    
+            curl -X PUT https://demofreeforever.apigw-aw-eu.webmethods.io//rest/apigateway/apis/070111f2-befc-11ec-9621-df3e3620bc44/publish?portalGatewayId=69ca5c6b-8b0a-4bae-8021-4ccf0ffd136f -d {\"communities\":[\"3bdf8005-5685-3ef5-b132-de4681963fb6\"],\"endpoints\":[\"http://freeforever.apigw-aw-eu.webmethods.io/gateway/Governed%20Petstore/"]} -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }}
+
+      - name: Promote to Prod Gateway
         run: |
          curl -X POST -d '{"description": "Promotion Set to promote to Prod environment","name":"PromoteToProd","destinationStages": ["6993504b-afd6-450d-a4ec-076a151e34e4"],"promotedAssets": {"api": ["070111f2-befc-11ec-9621-df3e3620bc44"]}}' -H "Content-Type: application/json" -u ${{ secrets.username }}:${{ secrets.password }} https://demofreeforever.apigw-aw-eu.webmethods.io/rest/apigateway/promotion  
          
